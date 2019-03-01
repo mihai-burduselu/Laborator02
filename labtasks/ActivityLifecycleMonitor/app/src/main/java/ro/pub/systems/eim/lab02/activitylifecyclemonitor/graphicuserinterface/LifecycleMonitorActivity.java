@@ -57,33 +57,39 @@ public class LifecycleMonitorActivity extends AppCompatActivity {
 
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP_MR1)
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
-    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
-        super.onSaveInstanceState(outState, outPersistentState);
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
         EditText usernameEditText = (EditText)findViewById(R.id.username_edit_text);
         EditText passwordEditText = (EditText)findViewById(R.id.password_edit_text);
         CheckBox remember_me_checkbox = (CheckBox)findViewById(R.id.remember_me_checkbox);
         String username = usernameEditText.getText().toString();
         String password = passwordEditText.getText().toString();
         if (remember_me_checkbox.isChecked()) {
-            outPersistentState.putString(Constants.USERNAME_EDIT_TEXT, username);
-            outPersistentState.putString(Constants.PASSWORD_EDIT_TEXT, password);
-            outPersistentState.putBoolean(Constants.REMEMBER_ME_CHECKBOX, remember_me_checkbox.isChecked());
+            outState.putString(Constants.USERNAME_EDIT_TEXT, username);
+            outState.putString(Constants.PASSWORD_EDIT_TEXT, password);
+            outState.putBoolean(Constants.REMEMBER_ME_CHECKBOX, remember_me_checkbox.isChecked());
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
-    public void onRestoreInstanceState(Bundle savedInstanceState, PersistableBundle persistentState) {
-        super.onRestoreInstanceState(savedInstanceState, persistentState);
-        String username = persistentState.getString(Constants.USERNAME_EDIT_TEXT);
-        String password = persistentState.getString(Constants.PASSWORD_EDIT_TEXT);
-        EditText usernameEditText = (EditText)findViewById(R.id.username_edit_text);
-        EditText passwordEditText = (EditText)findViewById(R.id.password_edit_text);
-        usernameEditText.setText(username);
-        passwordEditText.setText(password);
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        if (savedInstanceState.containsKey(Constants.USERNAME_EDIT_TEXT)) {
+            String username = savedInstanceState.getString(Constants.USERNAME_EDIT_TEXT);
+            EditText usernameEditText = (EditText)findViewById(R.id.username_edit_text);
+            usernameEditText.setText(username);
+        }
+        if (savedInstanceState.containsKey(Constants.PASSWORD_EDIT_TEXT)) {
+            String password = savedInstanceState.getString(Constants.PASSWORD_EDIT_TEXT);
+            EditText passwordEditText = (EditText)findViewById(R.id.password_edit_text);
+            passwordEditText.setText(password);
+        }
+        if (savedInstanceState.containsKey(Constants.REMEMBER_ME_CHECKBOX)) {
+            savedInstanceState.getBoolean(Constants.REMEMBER_ME_CHECKBOX);
+            CheckBox remember_me_checkbox = (CheckBox)findViewById(R.id.remember_me_checkbox);
+            remember_me_checkbox.setChecked(true);
+        }
     }
 
     @Override
